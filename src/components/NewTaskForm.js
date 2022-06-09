@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 
 function NewTaskForm({categories, onTaskFormSubmit}) {
-  const [itemText, setItemText] = useState("");
-  const [itemCategory, setItemCategory] = useState("");
+  const [formData, setFormData] = useState({
+    itemText: "",
+    itemCategory: "Code",
+  });
 
   const categoriesOption = categories.map(categorie => {
     if (!(categorie === "All")) {
@@ -15,29 +17,31 @@ function NewTaskForm({categories, onTaskFormSubmit}) {
   function handleSubmit(event) {
     event.preventDefault();
     const newTask = {
-      text: itemText,
-      category: itemCategory,
+      text: formData.itemText,
+      category: formData.itemCategory
     };
     onTaskFormSubmit(newTask);
   }
 
-  function handleSelect(event) {
-    setItemCategory(event.target.value);
-  }
-
   function handleChange(event) {
-    setItemText(event.target.value);
+    const name = event.target.name;
+    let value = event.target.value;
+  
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   }
 
   return (
     <form className="new-task-form" onSubmit={handleSubmit}>
       <label>
         Details
-        <input type="text" name="text" value={itemText} onChange={handleChange} />
+        <input type="text" name="itemText" value={formData.itemText} onChange={handleChange} />
       </label>
       <label>
         Category
-        <select name="category" value={itemCategory} onChange={handleSelect} >
+        <select name="itemCategory" value={formData.itemCategory} onChange={handleChange} >
           {categoriesOption}
         </select>
       </label>
